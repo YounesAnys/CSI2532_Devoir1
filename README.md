@@ -1,5 +1,5 @@
 # CSI2532_Devoir1
-### nom: Alexander Moussa
+### Nom: Alexander Moussa
 ### Numero d'étudiant: 300018112
 
 ## A1
@@ -112,7 +112,6 @@ COMMIT;
 
 ### c)
 ```
-BEGIN;
 ALTER TABLE licenses
 DROP CONSTRAINT licenses_pkey;
 
@@ -121,36 +120,21 @@ ADD CONSTRAINT licenses_pkey PRIMARY KEY (user_id, software_name, version);
 COMMIT;
 ```
 
-
 ### d)
 ```
-INSERT INTO licenses (user_id, software_name, access_code, version) VALUES
-(new_id, new_software, '1monthfree', 52)
-UPDATE licenses
-ADD version = '52'
-WHERE software_name = "Sketch" AND version <> '52';
-```
-
-
-
-
-
-
-```
 BEGIN;
-TRUNCATE licenses;
- 
-INSERT INTO licenses (user_id, software_name, access_code, version) VALUES
-(48, 'MS Word', 'abc123', 2012),
-(49, 'MS Word', 'def456', 2012),
-(50, 'MS Word', 'hij789', 2020),
-(48, 'Sketch', 'x1y2z3', 49),
-(51, 'Sketch', 'x2y3z4', 49),
-(49, 'Sketch', 'abc125', 52),
-(49, 'Chrome', 'def457', 'v92'),
-(48, 'Sketch', 'xxxyyy111', 52);
+INSERT INTO licenses (user_id, software_name, access_code, version) 
+SELECT id, 'Sketch', '1monthfree', '52'
+FROM users AS u LEFT JOIN(
+	SELECT user_id, software_name, access_code, version 
+	FROM licenses 
+	WHERE software_name = 'Sketch' AND version = '52') 
+AS l on u.id = l.user_id
+WHERE software_name IS NULL;
 COMMIT;
 ```
+
+
 
 
 
